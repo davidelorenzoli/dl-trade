@@ -9,8 +9,8 @@ import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Exchange {
-    private static final Logger LOG = LoggerFactory.getLogger(Exchange.class);
+public class ExchangeService {
+    private static final Logger LOG = LoggerFactory.getLogger(ExchangeService.class);
 
     private TradeListener tradeListener;
 
@@ -36,7 +36,7 @@ public class Exchange {
                 });
     }
 
-    public void addTradeListener(TradeListener tradeListener) {
+    public void setTradeListener(TradeListener tradeListener) {
         this.tradeListener = tradeListener;
     }
 

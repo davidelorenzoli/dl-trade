@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartTest extends Application {
+public class DLTradeTest extends Application {
     @Test
     public void test() {
         launch();

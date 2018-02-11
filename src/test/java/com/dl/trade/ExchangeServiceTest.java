@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class ExchangeTest {
-    private static final Logger LOG = LoggerFactory.getLogger(ExchangeTest.class);
+public class ExchangeServiceTest {
+    private static final Logger LOG = LoggerFactory.getLogger(ExchangeServiceTest.class);
 
     @Test
     public void test() throws IOException {

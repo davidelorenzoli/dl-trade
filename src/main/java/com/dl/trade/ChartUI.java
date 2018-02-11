@@ -1,25 +1,19 @@
 package com.dl.trade;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.stage.Stage;
-import org.knowm.xchange.dto.marketdata.Trade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.Calendar;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Chart extends Application {
-    private static final Logger LOG = LoggerFactory.getLogger(Chart.class);
+public class ChartUI {
+    private static final Logger LOG = LoggerFactory.getLogger(ChartUI.class);
 
     // sellers
     private XYChart.Series askSeries;
@@ -28,28 +22,7 @@ public class Chart extends Application {
 
     private AtomicInteger counter = new AtomicInteger(0);
 
-    @Override
-    public void init() throws Exception {
-        Exchange Exchange = new Exchange();
-        Exchange.addTradeListener(trade -> addTradeToChart(trade));
-        Exchange.trade();
-    }
-
-    @Override
-    public void start(Stage stage) {
-        stage.setTitle("Line Chart Sample");
-
-        Scene scene = new Scene(createChart(), 800, 600);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @Override
-    public void stop() throws Exception {
-        System.exit(0);
-    }
-
-    private Parent createChart() {
+    public Parent createChart() {
         askSeries = new XYChart.Series();
         askSeries.setName("Ask");
 
@@ -74,23 +47,20 @@ public class Chart extends Application {
         return lineChart;
     }
 
-    private void addTradeToChart(Trade trade) {
-        Platform.runLater(() -> {
-            int second = Calendar.getInstance().get(Calendar.SECOND);
-            XYChart.Data tradePrice = new XYChart.Data(counter.incrementAndGet(), new Random().nextInt(10));
+    public void addTradeToChart(long bidCount, long askCount) {
+            Platform.runLater(() -> {
+            bidSeries.getData().add(new XYChart.Data(counter.get(), bidCount));
+            askSeries.getData().add(new XYChart.Data(counter.get(), askCount));
 
-//            if (trade.getType() == Order.OrderType.ASK) {
-//                askSeries.getData().add(tradePrice);
-//            }
-//            if (trade.getType() == Order.OrderType.BID) {
-//                bidSeries.getData().add(tradePrice);
-//            }
-
-            bidSeries.getData().add(tradePrice);
+            counter.incrementAndGet();
 
             if (bidSeries.getData().size() > 20) {
                 LOG.info("Removing");
                 bidSeries.getData().remove(0);
+            }
+            if (askSeries.getData().size() > 20) {
+                LOG.info("Removing");
+                askSeries.getData().remove(0);
             }
         });
     }
